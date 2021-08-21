@@ -81,5 +81,21 @@ def save_mp4():
       res = {'path': filePath}
 
   return jsonify(data=res)
+
+@app.route('/mp4url', methods=['GET', 'POST'])
+def mp4url():
+  url = request.form.get('url')
+  print(url)
+  regx=r"http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*,]|(?:%[0-9a-fA-F][0-9a-fA-F]))+" 
+  listurl=re.findall(regx, url)
+  if len(listurl) == 0:
+      print("解析链接失败")
+      res = {"error": "No avatar file selected"}
+  else:
+      vid = vibrato.reurl(listurl[0])
+      res = {'path': vid}
+  return jsonify(data=res)
+
+  return jsonify(data=res)
 # 启动服务，监听 9000 端口，监听地址为 0.0.0.0
 app.run(debug=IS_SERVERLESS != True, port=9000, host='0.0.0.0')
